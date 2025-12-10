@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { getAllPosts, type PostMeta } from '@/lib/content/reader';
 
 function FeaturedPost({ post }: { post: PostMeta }) {
@@ -7,10 +8,13 @@ function FeaturedPost({ post }: { post: PostMeta }) {
   return (
     <article className="relative overflow-hidden rounded-2xl bg-muted/50 border border-border">
       {post.frontmatter.heroImage && (
-        <img
+        <Image
           src={post.frontmatter.heroImage}
           alt={post.frontmatter.title}
+          width={800}
+          height={256}
           className="w-full h-64 object-cover"
+          priority
         />
       )}
       <div className="p-8">

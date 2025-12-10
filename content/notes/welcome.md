@@ -1,9 +1,14 @@
 ---
 title: "Welcome to the Publishing Engine"
 subtitle: "A personal platform for writing and sharing ideas"
-date: "2024-12-10"
-tags: ["meta", "writing"]
-readingTime: 2
+status: published
+tags:
+  - "meta"
+  - "writing"
+slug: welcome
+publishedAt: "2024-12-10T00:00:00.000Z"
+createdAt: "2024-12-10T00:00:00.000Z"
+updatedAt: "2024-12-10T00:00:00.000Z"
 ---
 
 # Welcome

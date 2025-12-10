@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getPost, getAllPosts } from '@/lib/content/reader';
 import { remark } from 'remark';
 import html from 'remark-html';
@@ -56,10 +57,13 @@ export default async function PostPage({ params }: PageProps) {
   return (
     <article className="max-w-3xl mx-auto px-4 py-12">
       {post.frontmatter.heroImage && (
-        <img
+        <Image
           src={post.frontmatter.heroImage}
           alt={post.frontmatter.title}
+          width={800}
+          height={320}
           className="w-full h-80 object-cover rounded-2xl mb-8"
+          priority
         />
       )}
 

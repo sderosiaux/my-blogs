@@ -1,24 +1,27 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
-  // Database
-  DATABASE_URL: z.string().url(),
+  // GitHub (content storage)
+  GITHUB_TOKEN: z.string(),
+  GITHUB_OWNER: z.string(),
+  GITHUB_REPO: z.string(),
+  GITHUB_BRANCH: z.string().default('main'),
 
   // Auth
   ADMIN_TOKEN: z.string().min(32),
 
-  // R2 Storage
-  R2_ACCOUNT_ID: z.string(),
-  R2_ACCESS_KEY_ID: z.string(),
-  R2_SECRET_ACCESS_KEY: z.string(),
-  R2_BUCKET_NAME: z.string(),
-  R2_PUBLIC_URL: z.string().url(),
+  // R2 Storage (optional)
+  R2_ACCOUNT_ID: z.string().optional(),
+  R2_ACCESS_KEY_ID: z.string().optional(),
+  R2_SECRET_ACCESS_KEY: z.string().optional(),
+  R2_BUCKET_NAME: z.string().optional(),
+  R2_PUBLIC_URL: z.string().url().optional(),
 
-  // AI Services
-  ANTHROPIC_API_KEY: z.string(),
+  // AI Services (optional)
+  ANTHROPIC_API_KEY: z.string().optional(),
   GEMINI_API_KEY: z.string().optional(),
 
-  // Vercel
+  // Vercel (optional)
   VERCEL_DEPLOY_HOOK: z.string().url().optional(),
 
   // Runtime

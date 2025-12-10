@@ -1,8 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { isValidTransition } from '../service';
-
-// Note: Full service tests require database mocking
-// These are unit tests for pure functions
+import { describe, it, expect } from 'vitest';
+import { isValidTransition } from '../types';
 
 describe('isValidTransition', () => {
   it('allows idea → draft', () => {
@@ -34,5 +31,14 @@ describe('isValidTransition', () => {
 
   it('allows published → draft for revision', () => {
     expect(isValidTransition('published', 'draft')).toBe(true);
+  });
+
+  it('allows archived → idea or draft for revival', () => {
+    expect(isValidTransition('archived', 'idea')).toBe(true);
+    expect(isValidTransition('archived', 'draft')).toBe(true);
+  });
+
+  it('disallows draft → published directly', () => {
+    expect(isValidTransition('draft', 'published')).toBe(false);
   });
 });
