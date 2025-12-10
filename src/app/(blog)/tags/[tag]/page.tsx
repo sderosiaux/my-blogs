@@ -22,31 +22,44 @@ export default async function TagPage({ params }: PageProps) {
   const posts = await getPostsByTag(tag);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold mb-2">#{tag}</h1>
-      <p className="text-muted-foreground mb-8">{posts.length} posts</p>
+    <div className="min-h-screen bg-white">
+      <div className="max-w-2xl mx-auto px-6 py-16">
+        <header className="mb-10">
+          <Link
+            href="/tags"
+            className="text-sm text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            ← All tags
+          </Link>
+          <h1 className="text-3xl font-semibold text-gray-900 mt-4">{tag}</h1>
+          <p className="text-gray-500 mt-1">{posts.length} post{posts.length !== 1 ? 's' : ''}</p>
+        </header>
 
-      <div className="grid gap-4">
-        {posts.map(post => {
-          const url = `/${post.year}/${post.month}/${post.slug}`;
-          return (
-            <article key={url} className="p-6 rounded-lg border border-border">
-              <time className="text-sm text-muted-foreground">
-                {new Date(post.frontmatter.date).toLocaleDateString()}
-              </time>
-              <Link href={url}>
-                <h2 className="text-xl font-semibold mt-1 hover:text-muted-foreground transition-colors">
-                  {post.frontmatter.title}
-                </h2>
-              </Link>
-            </article>
-          );
-        })}
+        <div className="space-y-8">
+          {posts.map(post => {
+            const url = `/${post.year}/${post.month}/${post.slug}`;
+            return (
+              <article key={url}>
+                <Link href={url} className="group block">
+                  <time className="text-sm text-gray-400">
+                    {new Date(post.frontmatter.date).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </time>
+                  <h2 className="text-xl font-medium text-gray-900 mt-1 group-hover:text-blue-600 transition-colors">
+                    {post.frontmatter.title}
+                  </h2>
+                  {post.frontmatter.subtitle && (
+                    <p className="text-gray-500 mt-1">{post.frontmatter.subtitle}</p>
+                  )}
+                </Link>
+              </article>
+            );
+          })}
+        </div>
       </div>
-
-      <Link href="/tags" className="inline-block mt-8 text-muted-foreground hover:text-foreground">
-        ← All tags
-      </Link>
     </div>
   );
 }

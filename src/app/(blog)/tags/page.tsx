@@ -5,25 +5,35 @@ export default async function TagsPage() {
   const tags = await getAllTags();
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold mb-8">Tags</h1>
-
-      <div className="flex flex-wrap gap-3">
-        {tags.map(({ tag, count }) => (
+    <div className="min-h-screen bg-white">
+      <div className="max-w-2xl mx-auto px-6 py-16">
+        <header className="mb-10">
           <Link
-            key={tag}
-            href={`/tags/${tag}`}
-            className="px-4 py-2 bg-muted rounded-lg hover:bg-muted/80 transition-colors"
+            href="/"
+            className="text-sm text-gray-400 hover:text-gray-600 transition-colors"
           >
-            <span className="font-medium">#{tag}</span>
-            <span className="ml-2 text-muted-foreground">({count})</span>
+            ← Back
           </Link>
-        ))}
-      </div>
+          <h1 className="text-3xl font-semibold text-gray-900 mt-4">Tags</h1>
+        </header>
 
-      {tags.length === 0 && (
-        <p className="text-muted-foreground">No tags yet.</p>
-      )}
+        <div className="flex flex-wrap gap-3">
+          {tags.map(({ tag, count }) => (
+            <Link
+              key={tag}
+              href={`/tags/${tag}`}
+              className="px-3 py-1.5 bg-gray-100 rounded text-sm hover:bg-gray-200 transition-colors"
+            >
+              <span className="text-gray-700">{tag}</span>
+              <span className="ml-1.5 text-gray-400">({count})</span>
+            </Link>
+          ))}
+        </div>
+
+        {tags.length === 0 && (
+          <p className="text-gray-500">No tags yet.</p>
+        )}
+      </div>
     </div>
   );
 }
