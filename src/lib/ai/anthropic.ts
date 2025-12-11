@@ -24,6 +24,13 @@ Writing guidelines:
 - Reference real companies/projects when relevant
 - Include [VISUAL: description] placeholders where diagrams would help
 
+Engage the reader's thinking:
+- Present tradeoffs honestly (X gives you Y, but costs Z)
+- Acknowledge counterarguments before dismissing them
+- Pose questions that invite reflection ("But what if...?", "Consider this:")
+- Show both sides, then explain your stance
+- Leave room for nuance rather than absolute statements
+
 Avoid:
 - Marketing speak, buzzwords, excessive hedging
 - Em dashes (use commas, colons, or parentheses)
