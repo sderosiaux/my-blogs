@@ -1,11 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 
+interface Settings {
+  enabled: boolean;
+  schedule: string;
+  hnEnabled: boolean;
+  hnMinScore: number;
+  redditEnabled: boolean;
+  subreddits: string[];
+  topics: string[];
+  relevanceThreshold: number;
+}
+
 export default function SettingsPage() {
-  const [config, setConfig] = useState({
-    enabled: true,
+  const [config, setConfig] = useState<Settings>({
+    enabled: false,
     schedule: '0 2 * * *',
     hnEnabled: true,
     hnMinScore: 100,
@@ -15,10 +26,65 @@ export default function SettingsPage() {
     relevanceThreshold: 0.7,
   });
 
-  const handleSave = async () => {
-    // TODO: Save to API
-    alert('Settings saved!');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const response = await fetch('/api/admin/settings');
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch settings');
+      }
+
+      const data = await response.json();
+      setConfig(data.settings);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load settings');
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const handleSave = async () => {
+    setSaving(true);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      const response = await fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(config),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to save settings');
+      }
+
+      setSuccess('Settings saved successfully!');
+      setTimeout(() => setSuccess(null), 3000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save settings');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <p className="text-muted-foreground">Loading settings...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-2xl">
@@ -26,6 +92,18 @@ export default function SettingsPage() {
         <h1 className="text-2xl font-bold">Automation Settings</h1>
         <p className="text-muted-foreground">Configure background content monitoring</p>
       </div>
+
+      {error && (
+        <div className="rounded-md bg-red-50 border border-red-200 p-4">
+          <p className="text-sm text-red-800">{error}</p>
+        </div>
+      )}
+
+      {success && (
+        <div className="rounded-md bg-green-50 border border-green-200 p-4">
+          <p className="text-sm text-green-800">{success}</p>
+        </div>
+      )}
 
       <div className="space-y-6">
         <div className="flex items-center justify-between p-4 border border-border rounded-lg">
@@ -78,7 +156,9 @@ export default function SettingsPage() {
           />
         </div>
 
-        <Button onClick={handleSave}>Save Settings</Button>
+        <Button onClick={handleSave} disabled={saving}>
+          {saving ? 'Saving...' : 'Save Settings'}
+        </Button>
       </div>
     </div>
   );
